@@ -6,6 +6,7 @@ import About from './components/About';
 import Faq from './components/Faq';
 import Box from './components/boxes/Boxes';
 import Random from './components/boxes/Random';
+import Currency from './components/currencyConverter/Currency';
 import {Router,Route,IndexRoute,browserHistory} from 'react-router';
 
 ReactDOM.render(
@@ -16,6 +17,7 @@ ReactDOM.render(
      <Route path="faq" component={Faq} />
      <Route path="boxes" component={Box} />
      <Route path="random" component={Random} />
+      <Route path="currency" component={Currency} />
    </Route>
  </Router>,
  document.getElementById('root')
