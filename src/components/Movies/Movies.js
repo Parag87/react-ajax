@@ -1,12 +1,15 @@
 import React from 'react';
 import axios from 'axios';
+import PouchDB from 'pouchdb';
 
 export default class Movies extends React.Component{
   constructor(props){
       super(props);
+      this.db = new PouchDB('movies');
       this.state = {results: []};
       this.search = this.search.bind(this);
       this.clear = this.clear.bind(this);
+      this.add = this.add.bind(this);
   }
 
   search(){
@@ -21,6 +24,24 @@ export default class Movies extends React.Component{
         console.log(error);
     });
   }
+
+  add(event){
+    const title = event.target.parentNode.parentNode.querySelector('.title').textContent;
+    const year = event.target.parentNode.parentNode.querySelector('.year').textContent;
+    const poster = event.target.parentNode.parentNode.querySelector('.poster').getAttribute("src");
+
+      this.db.put({
+        _id: title,
+        year,
+        poster
+      }).then(rsp => {
+          console.log(rsp);
+        }).catch(err => {
+        console.log(err);
+      });
+
+  }
+
   clear(){
     this.query.value = "";
     this.setState({results: []});
@@ -43,6 +64,7 @@ export default class Movies extends React.Component{
           <table className="table table-striped">
             <thead>
               <tr>
+                <th>Add</th>
                 <th>Title</th>
                 <th>Year</th>
                 <th>Poster</th>
@@ -53,9 +75,10 @@ export default class Movies extends React.Component{
               this.state.results.map((r,i) => {
                 return(
                   <tr key={i}>
-                    <td>{r.Title}</td>
-                    <td>{r.Year}</td>
-                    <td><img src={r.Poster} /></td>
+                    <td>  <button onClick={this.add} className="btn btn-success btn-xs">Add</button></td>
+                    <td className="title">{r.Title}</td>
+                    <td className="year">{r.Year}</td>
+                    <td><img className="poster" src={r.Poster} /></td>
                   </tr>
                 );
               })
